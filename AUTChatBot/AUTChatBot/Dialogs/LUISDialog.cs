@@ -6,7 +6,6 @@ using System.Web;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
-using static AUTChatBot.Program;
 
 namespace AUTChatBot.Dialogs
 {

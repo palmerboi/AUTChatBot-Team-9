@@ -2,8 +2,6 @@
 
 using System.Linq;
 using System.Threading.Tasks;
-using System.Net;
-using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Newtonsoft.Json;
 using MongoDB.Driver;
@@ -26,15 +24,27 @@ namespace AUTChatBot
 
             var papersList = db.GetCollection<BsonDocument>("papers");
 
+            
+
             using (IAsyncCursor<BsonDocument> cursor = await papersList.FindAsync(new BsonDocument()))
             {
                 while (await cursor.MoveNextAsync())
                 {
                     IEnumerable<BsonDocument> batch = cursor.Current;
                     foreach (BsonDocument d in batch)
-                        IEnumerable<BsonElement> elementBatch = d.ToList();
                     {
-                        foreach(BsonElement e in d.ToList<BsonElement>)
+
+                        var jsonSettings = new MongoDB.Bson.IO.JsonWriterSettings
+                        {
+                            OutputMode = MongoDB.Bson.IO.JsonOutputMode.Strict
+                        };
+                        JsonObject json = JsonObject.Parse(d.ToJson<MongoDB.Bson.BsonDocument>(jsonSettings));
+
+
+
+
+                        IEnumerable<BsonElement> elementBatch = d.ToList();
+                        foreach (BsonElement e in elementBatch)
                         {
                             if (e.GetValue("paperName", new BsonString(string.Empty)).AsString == paperName && !paperCode)
                             {
