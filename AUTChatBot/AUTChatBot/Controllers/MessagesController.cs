@@ -7,14 +7,16 @@ using Microsoft.Bot.Connector;
 
 namespace AUTChatBot
 {
-    internal static IDialog<object> MakeRoot()
-    {
-        return Chain.From(() => new LUISDialog());
-    }
+    
 
     [BotAuthentication]
     public class MessagesController : ApiController
     {
+
+        internal static IDialog<object> MakeRoot()
+        {
+            return Chain.From(() => new LUISDialog());
+        }
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
