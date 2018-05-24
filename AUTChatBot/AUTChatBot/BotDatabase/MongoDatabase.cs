@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using System.Collections.Generic;
+using System.Json;
 
 namespace AUTChatBot
 {
@@ -38,7 +39,9 @@ namespace AUTChatBot
                         {
                             OutputMode = MongoDB.Bson.IO.JsonOutputMode.Strict
                         };
-                        JsonObject json = JsonObject.Parse(d.ToJson<MongoDB.Bson.BsonDocument>(jsonSettings));
+
+                        JsonObject obj = (JsonObject)d.ToJson<MongoDB.Bson.BsonDocument>(jsonSettings);
+                        
 
 
 
