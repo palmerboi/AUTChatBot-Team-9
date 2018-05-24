@@ -17,10 +17,49 @@ namespace AUTChatBot
         private const string PrimaryKey = "LyPERf5eIMs5P1CII26a6BBy6vnvxvyrj162R0UTD25vzxff4vEilMs03hV7Nnt07t8zb2l3kwSB7NbLPdzujA====";
         private DocumentClient client = new DocumentClient(new Uri(EndpointUri), PrimaryKey);
 
+        static async Task<String> findPaperAsync(String paperName, Boolean paperCode)
+        {
+            var client = getClient();
+
+            var papersList = db.GetCollection<BsonDocument>("papers");
+
+            using (IAsyncCurser<BsonDocument> cursor = await papersList.FindAsync(new BsonDocument()))
+            {
+                while (await cursor.MoveNextAsync())
+                {
+                    IEumerable<BsonDocument> batch = cursor.Current;
+                    foreach(BsonDocument d in batch)
+                    {
+                        foreach(BsonElement e in d)
+                        {
+                            if (e.GetValue("paperName", new BsonString(string.Empty)).AsString == paperName && !paperCode)
+                            {
+                                var paperCode = e.GetValue("paperCode", new BsonString(string.Empty)).AsString;
+                                return (String)paperCode
+                            }
+                            else if (e.GetValue("paperCode", new BsonString(string.Empty)).AsString == paperName && paperCode)
+                            {
+                                var paperName = e.GetValue("paperName", new BsonString(string.Empty)).AsString;
+                                return (String)paperName;
+                            }
+                        }
+                        
+                    }
+                }
+
+                return null;
+            }
+        }
+
         public static Degree getDegree()
         {
             ImongoDatabase db = getDB();
-            var collList = db.ListCollections().ToList();
+            
+
+
+
+
+            
 
 
         }
@@ -30,10 +69,10 @@ namespace AUTChatBot
 
         }
 
-        public static ImongoDatabase getDB()
+        public static ImongoDatabase getClient()
         {
-            MongoClient dbClient = new MongoClient("mongodb://autchatbotdb:LyPERf5eIMs5P1CII26a6BBy6vnvxvyrj162R0UTD25vzxff4vEilMs03hV7Nnt07t8zb2l3kwSB7NbLPdzujA==@autchatbotdb.documents.azure.com:10255/?ssl=true&replicaSet=globaldb");
-            return dbClient.GetDatabase("autbotdb");
+            return new MongoClient("mongodb://autchatbotdb:LyPERf5eIMs5P1CII26a6BBy6vnvxvyrj162R0UTD25vzxff4vEilMs03hV7Nnt07t8zb2l3kwSB7NbLPdzujA==@autchatbotdb.documents.azure.com:10255/?ssl=true&replicaSet=globaldb");
+            
         }
 
         static void Main(string[] args)
