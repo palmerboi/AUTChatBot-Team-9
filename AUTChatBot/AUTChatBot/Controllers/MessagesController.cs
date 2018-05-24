@@ -7,6 +7,11 @@ using Microsoft.Bot.Connector;
 
 namespace AUTChatBot
 {
+    internal static IDialog<object> MakeRoot()
+    {
+        return Chain.From(() => new LUISDialog());
+    }
+
     [BotAuthentication]
     public class MessagesController : ApiController
     {
@@ -18,7 +23,7 @@ namespace AUTChatBot
         {
             if (activity.Type == ActivityTypes.Message)
             {
-                await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+                await Conversation.SendAsync(activity, MakeRoot());
             }
             else
             {
