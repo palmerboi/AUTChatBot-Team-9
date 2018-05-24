@@ -17,6 +17,22 @@ namespace AUTChatBot
         private const string PrimaryKey = "LyPERf5eIMs5P1CII26a6BBy6vnvxvyrj162R0UTD25vzxff4vEilMs03hV7Nnt07t8zb2l3kwSB7NbLPdzujA====";
         private DocumentClient client = new DocumentClient(new Uri(EndpointUri), PrimaryKey);
 
+        public static Degree getDegree()
+        {
+            ImongoDatabase db = getDB();
+        }
+
+        public static Paper getPaper()
+        {
+
+        }
+
+        public static ImongoDatabase getDB()
+        {
+            MongoClient dbClient = new MongoClient("mongodb://autchatbotdb:LyPERf5eIMs5P1CII26a6BBy6vnvxvyrj162R0UTD25vzxff4vEilMs03hV7Nnt07t8zb2l3kwSB7NbLPdzujA==@autchatbotdb.documents.azure.com:10255/?ssl=true&replicaSet=globaldb");
+            return dbClient.GetDatabase("autbotdb");
+        }
+
         static void Main(string[] args)
         {
             try
