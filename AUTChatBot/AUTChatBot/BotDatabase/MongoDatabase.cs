@@ -11,7 +11,7 @@ using MongoDB.Bson;
 
 namespace AUTChatBot
 {
-    class Program
+    class MongoDatabase
     {
         private const string EndpointUri = "autchatbotdb.documents.azure.com:443/";
         private const string PrimaryKey = "LyPERf5eIMs5P1CII26a6BBy6vnvxvyrj162R0UTD25vzxff4vEilMs03hV7Nnt07t8zb2l3kwSB7NbLPdzujA====";
@@ -20,6 +20,9 @@ namespace AUTChatBot
         public static Degree getDegree()
         {
             ImongoDatabase db = getDB();
+            var collList = db.ListCollections().ToList();
+
+
         }
 
         public static Paper getPaper()
