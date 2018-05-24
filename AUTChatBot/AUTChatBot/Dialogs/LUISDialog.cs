@@ -1,0 +1,87 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Luis;
+using Microsoft.Bot.Builder.Luis.Models;
+using static AUTChatBot.BotDatabase.SQLDatabaseClient;
+
+namespace AUTChatBot.Dialogs
+{
+    [LuisModel("289207be-4047-43a8-9486-f5230a1cb781", "398bf4c98ecb4f8ea1c9b71b9baaedb5")]
+    [Serializable]
+    public class LUISDialog : LuisDialog<object>
+    {
+        [LuisIntent("")]
+        public async Task None(IDialogContext context, LuisResult result)
+        {
+            await context.PostAsync("Sorry, Can you write your message in a different way to help me understand?");
+            context.Wait(MessageReceived);
+        }
+
+        [LuisIntent("Greet")]
+        public async Task Greet(IDialogContext context, LuisResult result)
+        {
+            await context.PostAsync("Hello, I am the AUT Chatbot, Please ask me about any papers you need help with.");
+            context.Wait(MessageReceived);
+        }
+
+        [LuisIntent("Request Paper Code")]
+        public async Task RequestPaperCode(IDialogContext context, LuisResult result)
+        {
+            string entities = this.BotEntityRecognition(result);
+            Paper paper = GetPaper(entities, false);
+            await context.PostAsync("The paper code is " + paper.PaperCode);
+            context.Wait(MessageReceived);
+        }
+
+        [LuisIntent("Request Paper Name")]
+        public async Task RequestPaperName(IDialogContext context, LuisResult result)
+        {
+            string entities = this.BotEntityRecognition(result);
+            Paper paper = GetPaper(entities, true);
+            await context.PostAsync("The paper Name is " + paper.PaperName);
+            context.Wait(MessageReceived);
+        }
+
+        [LuisIntent("Request Paper Prerequisites")]
+        public async Task RequestPaperPreRequisites(IDialogContext context, LuisResult result)
+        {
+            await context.PostAsync("Sorry, Can you write your message in a different way to help me understand?");
+            context.Wait(MessageReceived);
+        }
+
+        [LuisIntent("Request Paper Corequisites")]
+        public async Task RequestPaperCoRequisites(IDialogContext context, LuisResult result)
+        {
+            await context.PostAsync("Sorry, Can you write your message in a different way to help me understand?");
+            context.Wait(MessageReceived);
+        }
+
+        [LuisIntent("Check Paper in Major")]
+        public async Task CheckPaperInMajor(IDialogContext context, LuisResult result)
+        {
+            await context.PostAsync("Sorry, Can you write your message in a different way to help me understand?");
+            context.Wait(MessageReceived);
+        }
+
+        public string BotEntityRecognition(LuisResult result)
+        {
+            StringBuilder entityResults = new StringBuilder();
+
+            if (result.Entities.Count > 0)
+            {
+                foreach (EntityRecommendation item in result.Entities)
+                {
+                    entityResults.Append(item.Entity + ",");
+                }
+                entityResults.Remove(entityResults.Length - 1, 1);
+            }
+
+            return entityResults.ToString();
+        }
+    }
+}
