@@ -31,9 +31,10 @@ namespace AUTChatBot
                 while (await cursor.MoveNextAsync())
                 {
                     IEnumerable<BsonDocument> batch = cursor.Current;
-                    foreach(BsonDocument d in batch)
+                    foreach (BsonDocument d in batch)
+                        IEnumerable<BsonElement> elementBatch = d.ToList();
                     {
-                        foreach(BsonElement e in d)
+                        foreach(BsonElement e in d.ToList<BsonElement>)
                         {
                             if (e.GetValue("paperName", new BsonString(string.Empty)).AsString == paperName && !paperCode)
                             {
