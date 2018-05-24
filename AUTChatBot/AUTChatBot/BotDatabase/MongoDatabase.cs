@@ -35,7 +35,7 @@ namespace AUTChatBot
                             if (e.GetValue("paperName", new BsonString(string.Empty)).AsString == paperName && !paperCode)
                             {
                                 var paperCode = e.GetValue("paperCode", new BsonString(string.Empty)).AsString;
-                                return (String)paperCode
+                                return (String)paperCode;
                             }
                             else if (e.GetValue("paperCode", new BsonString(string.Empty)).AsString == paperName && paperCode)
                             {
