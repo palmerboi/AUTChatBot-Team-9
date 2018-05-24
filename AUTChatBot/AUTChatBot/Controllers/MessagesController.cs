@@ -52,7 +52,7 @@ namespace AUTChatBot
                 // Not available in all channels
                 if (message.MembersAdded.Any(o => o.Id == message.Recipient.Id))
                 {
-                    var reply = message.CreateReply("Henlo, i r aut bot chat!");
+                    var reply = message.CreateReply("Hello! I am the AUT Student Advisor Bot, ask me questions about your course to get started.");
 
                     ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
 
