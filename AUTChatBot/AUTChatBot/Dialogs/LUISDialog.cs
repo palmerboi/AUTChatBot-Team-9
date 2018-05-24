@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Bot.Builder.Dialogs;
@@ -10,7 +11,7 @@ using static AUTChatBot.BotDatabase.SQLDatabaseClient;
 
 namespace AUTChatBot.Dialogs
 {
-    [LuisModel("{289207be-4047-43a8-9486-f5230a1cb781}", "{398bf4c98ecb4f8ea1c9b71b9baaedb5}")]
+    [LuisModel("289207be-4047-43a8-9486-f5230a1cb781", "398bf4c98ecb4f8ea1c9b71b9baaedb5")]
     [Serializable]
     public class LUISDialog : LuisDialog<object>
     {
@@ -37,11 +38,30 @@ namespace AUTChatBot.Dialogs
             context.Wait(MessageReceived);
         }
 
+        public string BotEntityRecognition(LuisResult result)
+        {
+            StringBuilder entityResults = new StringBuilder();
+
+            if(result.Entities.Count > 0)
+            {
+                foreach (EntityRecommendation item in result.Entities)
+                {
+                    entityResults.Append(item.Entity + ",");
+                }
+                entityResults.Remove(entityResults.Length - 1, 1);
+            }
+
+            return entityResults.ToString();
+        }
+
         [LuisIntent("Request Paper Name")]
         public async Task RequestPaperName(IDialogContext context, LuisResult result)
         {
-            var valuesEntity = result.Entities;
-            Paper paper = GetPaper(valuesEntity[0].Resolution.Values.FirstOrDefault().ToString(), true);
+            string entities = this.BotEntityRecognition(result);
+            //var valuesEntity = result.Entities;
+            //var res = valuesEntity[0].Resolution.Values.ElementAt(0);
+            //String code = res.ToString();
+            Paper paper = GetPaper(entities, true);
             await context.PostAsync("The paper Name is " + paper.PaperName);
             context.Wait(MessageReceived);
         }

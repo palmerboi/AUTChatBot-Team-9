@@ -7,7 +7,7 @@ using System.Text;
 
 namespace AUTChatBot.BotDatabase
 {
-    public class SQLDatabaseClient
+    public static class SQLDatabaseClient
     {
 
         public static SqlConnection GetSQLConnection()
