@@ -31,15 +31,18 @@ namespace AUTChatBot.Dialogs
         [LuisIntent("Request Paper Code")]
         public async Task RequestPaperCode(IDialogContext context, LuisResult result)
         {
-            //  Write code to test here
-            await context.PostAsync("Sorry, Can you write your message in a different way to help me understand?");
+            var task = Task.Run(() => MongoDatabase.findPaperAsync(result, false));
+            task.wait();
+            await context.PostAsync("The paper code is " + task);
             context.Wait(MessageReceived);
         }
 
         [LuisIntent("Request Paper Name")]
         public async Task RequestPaperName(IDialogContext context, LuisResult result)
         {
-            await context.PostAsync("Sorry, Can you write your message in a different way to help me understand?");
+            var task = Task.Run(() => MongoDatabase.findPaperAsync(result, true));
+            task.wait();
+            await context.PostAsync("The paper Name is " + task);
             context.Wait(MessageReceived);
         }
 
