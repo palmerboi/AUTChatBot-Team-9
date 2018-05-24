@@ -1,0 +1,7 @@
+language: csharp
+solution: AUTChatBot/AUTChatBot.sln
+deploy:
+  provider: azure_web_apps
+  username: "SenorDeploy"
+  password: "SenorPassword"
+  site: "AUTChatBot20180504112321"
