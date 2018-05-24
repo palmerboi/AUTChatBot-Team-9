@@ -6,6 +6,7 @@ using System.Web;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
+using static AUTChatBot.BotDatabase.SQLDatabaseClient;
 
 namespace AUTChatBot.Dialogs
 {
@@ -30,18 +31,18 @@ namespace AUTChatBot.Dialogs
         [LuisIntent("Request Paper Code")]
         public async Task RequestPaperCode(IDialogContext context, LuisResult result)
         {
-            var task = Task.Run(() => MongoDatabase.findPaperAsync(result, false));
-            task.wait();
-            await context.PostAsync("The paper code is " + task);
+            var valuesEntity = result.Entities;
+            Paper paper = GetPaper(valuesEntity[0].Resolution.Values.FirstOrDefault().ToString(), false);
+            await context.PostAsync("The paper code is " + paper.PaperCode);
             context.Wait(MessageReceived);
         }
 
         [LuisIntent("Request Paper Name")]
         public async Task RequestPaperName(IDialogContext context, LuisResult result)
         {
-            var task = Task.Run(() => MongoDatabase.findPaperAsync(result, true));
-            task.wait();
-            await context.PostAsync("The paper Name is " + task);
+            var valuesEntity = result.Entities;
+            Paper paper = GetPaper(valuesEntity[0].Resolution.Values.FirstOrDefault().ToString(), true);
+            await context.PostAsync("The paper Name is " + paper.PaperName);
             context.Wait(MessageReceived);
         }
 
