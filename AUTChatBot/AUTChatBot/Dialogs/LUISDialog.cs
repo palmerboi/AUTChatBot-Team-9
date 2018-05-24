@@ -10,7 +10,7 @@ using static AUTChatBot.Program;
 
 namespace AUTChatBot.Dialogs
 {
-    [LuisModel("{luis_app_id}", "{subscription_key}")]
+    [LuisModel("{289207be-4047-43a8-9486-f5230a1cb781}", "{398bf4c98ecb4f8ea1c9b71b9baaedb5}")]
     [Serializable]
     public class LUISDialog : LuisDialog<object>
     {
