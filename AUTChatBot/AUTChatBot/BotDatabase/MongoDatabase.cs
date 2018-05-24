@@ -8,6 +8,7 @@ using Microsoft.Azure.Documents.Client;
 using Newtonsoft.Json;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using System.Collections.Generic;
 
 namespace AUTChatBot
 {
@@ -19,15 +20,17 @@ namespace AUTChatBot
 
         static async Task<String> findPaperAsync(String paperName, Boolean paperCode)
         {
-            var client = getClient();
+            IMongoClient client = getClient();
+
+            IMongoDatabase db = client.GetDatabase("autbotdb");
 
             var papersList = db.GetCollection<BsonDocument>("papers");
 
-            using (IAsyncCurser<BsonDocument> cursor = await papersList.FindAsync(new BsonDocument()))
+            using (IAsyncCursor<BsonDocument> cursor = await papersList.FindAsync(new BsonDocument()))
             {
                 while (await cursor.MoveNextAsync())
                 {
-                    IEumerable<BsonDocument> batch = cursor.Current;
+                    IEnumerable<BsonDocument> batch = cursor.Current;
                     foreach(BsonDocument d in batch)
                     {
                         foreach(BsonElement e in d)
@@ -51,23 +54,7 @@ namespace AUTChatBot
             }
         }
 
-        public static Degree getDegree()
-        {
-            ImongoDatabase db = getDB();
-            
-
-
-
-
-            
-
-
-        }
-
-        public static Paper getPaper()
-        {
-
-        }
+        
 
         public static ImongoDatabase getClient()
         {
