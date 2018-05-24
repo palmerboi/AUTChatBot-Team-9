@@ -32,35 +32,16 @@ namespace AUTChatBot.Dialogs
         [LuisIntent("Request Paper Code")]
         public async Task RequestPaperCode(IDialogContext context, LuisResult result)
         {
-            var valuesEntity = result.Entities;
-            Paper paper = GetPaper(valuesEntity[0].Resolution.Values.FirstOrDefault().ToString(), false);
+            string entities = this.BotEntityRecognition(result);
+            Paper paper = GetPaper(entities, false);
             await context.PostAsync("The paper code is " + paper.PaperCode);
             context.Wait(MessageReceived);
-        }
-
-        public string BotEntityRecognition(LuisResult result)
-        {
-            StringBuilder entityResults = new StringBuilder();
-
-            if(result.Entities.Count > 0)
-            {
-                foreach (EntityRecommendation item in result.Entities)
-                {
-                    entityResults.Append(item.Entity + ",");
-                }
-                entityResults.Remove(entityResults.Length - 1, 1);
-            }
-
-            return entityResults.ToString();
         }
 
         [LuisIntent("Request Paper Name")]
         public async Task RequestPaperName(IDialogContext context, LuisResult result)
         {
             string entities = this.BotEntityRecognition(result);
-            //var valuesEntity = result.Entities;
-            //var res = valuesEntity[0].Resolution.Values.ElementAt(0);
-            //String code = res.ToString();
             Paper paper = GetPaper(entities, true);
             await context.PostAsync("The paper Name is " + paper.PaperName);
             context.Wait(MessageReceived);
@@ -85,6 +66,22 @@ namespace AUTChatBot.Dialogs
         {
             await context.PostAsync("Sorry, Can you write your message in a different way to help me understand?");
             context.Wait(MessageReceived);
+        }
+
+        public string BotEntityRecognition(LuisResult result)
+        {
+            StringBuilder entityResults = new StringBuilder();
+
+            if (result.Entities.Count > 0)
+            {
+                foreach (EntityRecommendation item in result.Entities)
+                {
+                    entityResults.Append(item.Entity + ",");
+                }
+                entityResults.Remove(entityResults.Length - 1, 1);
+            }
+
+            return entityResults.ToString();
         }
     }
 }
