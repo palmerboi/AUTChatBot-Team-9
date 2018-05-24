@@ -31,6 +31,7 @@ namespace AUTChatBot.Dialogs
         [LuisIntent("Request Paper Code")]
         public async Task RequestPaperCode(IDialogContext context, LuisResult result)
         {
+            //  Write code to test here
             await context.PostAsync("Sorry, Can you write your message in a different way to help me understand?");
             context.Wait(MessageReceived);
         }
